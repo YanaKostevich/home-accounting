@@ -52,6 +52,8 @@ export default {
   methods: {
     logout () {
       this.$router.push('/login?message=logout')
+      this.$toast.success('Ви вийшли із системи')
+      setTimeout(this.$toast.clear, 30000)
     },
     dateFilter (value, format = 'date') {
       value = this.date

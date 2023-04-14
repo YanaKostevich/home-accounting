@@ -27,6 +27,7 @@
 <script>
 import useValidate from '@vuelidate/core'
 import { email, required, minLength } from '@vuelidate/validators'
+// import messages from '@/utils/messages'
 
 export default {
   data () {
@@ -65,11 +66,17 @@ export default {
       }
     }
   }
+  // mounted () {
+  //   if (messages[this.$route.query.message]) {
+  //     this.$message(messages[this.$route.query.message])
+  //   }
+  //   this.$message('Text')
+  // }
 }
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .card {
   .card-content {
     .card-title {
