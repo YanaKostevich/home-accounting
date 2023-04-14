@@ -1,49 +1,89 @@
 <template>
-  <form class="card auth-card">
+  <form class="card auth-card" @submit.prevent="submitForm">
     <div class="card-content">
-      <span class="card-title">Домашняя бухгалтерия</span>
+      <span class="card-title">Домашня бухгалтерія</span>
       <div class="input-field">
-        <input
-          id="email"
-          type="text"
-          class="validate"
-        >
-        <label for="email">Email</label>
-        <small class="helper-text invalid">Email</small>
+        <input type="text" placeholder="Email" v-model.trim="email"/>
+        <span v-if="v$.email.$error"> {{ v$.email.$errors[0].$message }} </span>
       </div>
       <div class="input-field">
-        <input
-          id="password"
-          type="password"
-          class="validate"
-        >
-        <label for="password">Пароль</label>
-        <small class="helper-text invalid">Password</small>
+        <input type="password" placeholder="Password" v-model="password"/>
+        <span v-if="v$.password.$error"> {{ v$.password.$errors[0].$message }} </span>
       </div>
     </div>
     <div class="card-action">
-      <div>
-        <button
-          class="btn waves-effect waves-light auth-submit"
-          type="submit"
-        >
-          Войти
-          <i class="material-icons right">send</i>
-        </button>
-      </div>
-
+      <button class="btn waves-effect waves-light auth-submit">
+        Увійти
+        <i class="material-icons right">send</i>
+      </button>
       <p class="center">
-        Нет аккаунта?
-        <a href="/">Зарегистрироваться</a>
+        Немає акаунта?
+        <router-link to="/register">Зареєструватись</router-link>
       </p>
     </div>
   </form>
 </template>
 
 <script>
-export default {}
+import useValidate from '@vuelidate/core'
+import { email, required, minLength } from '@vuelidate/validators'
+
+export default {
+  data () {
+    return {
+      v$: useValidate(),
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    submitForm () {
+      this.v$.$validate() // checks all inputs
+      if (!this.v$.$error) {
+        // eslint-disable-next-line no-unused-vars
+        const formData = {
+          email: this.email,
+          password: this.password
+        }
+        console.log(formData)
+        // if ANY fail validation
+        this.$router.push('/')
+      } else {
+        alert('Form failed validation')
+      }
+    }
+  },
+  validations () {
+    return {
+      email: {
+        email,
+        required
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      }
+    }
+  }
+}
+
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.card {
+  .card-content {
+    .card-title {
+      margin-bottom: 2rem;
+    }
+  }
+}
+.input-field {
+  span {
+    color: red;
+  }
+}
 
+button {
+  margin-top: 10px;
+}
 </style>
